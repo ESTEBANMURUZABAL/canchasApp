@@ -1,7 +1,7 @@
 'use strict';
 import React, { Component, PropTypes } from 'react';
 import { StyleSheet,View,Text,Dimensions,TouchableOpacity,TouchableHighlight } from 'react-native';
-
+import MapView from 'react-native-maps';
 
 export default class CanchasMapsMarker extends Component {
 
@@ -15,7 +15,29 @@ export default class CanchasMapsMarker extends Component {
     const {canchas,followLocation,region} = this.props;
     
     return (
-<View />
+
+      <MapView
+        ref="map"
+        style={styles.map}
+        region={region}
+        //onRegionChange={()=>this.props.onRegionChange()}
+      >
+        { Object.keys(canchas).map(function (key) {
+          var cancha = Object.assign({},canchas[key]);
+          return (
+            <MapView.Marker
+              ref={"ref"+cancha.id}
+              key={"key"+cancha.id}
+              coordinate={{latitude:parseFloat(cancha.latitude),longitude:parseFloat(cancha.longitude)}}
+              title={cancha.name}
+              description={`${cancha.location}`}
+              onSelect={()=>followLocation(cancha)}
+              pinColor="blue"
+           />
+          );
+        })}
+        <View/>
+      </MapView>
     );
   }
 }
